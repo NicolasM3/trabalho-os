@@ -1,18 +1,17 @@
 add_a_user()
 {
   USER=$1
-  PASSWORD=$2
   shift; shift
   # descarta os dois primeiros parametros
   COMMENTS=$@
   
-  useradd -c "${COMMENTS}" $USER
+  useradd $USER
   if [ "$?" -ne "0" ]; then
     echo "Falha ao tentar adicionar usuário"
     return 1
   fi
 
-  passwd #USER $PASSWORD
+  passwd $USER
   if [ "$?" -ne "0" ]; then
     echo "Erro ao tentar definir senha"
     return 2
@@ -43,12 +42,11 @@ read -p "Opção: " OPTION
 
 case $OPTION in
     1)
-        read -p "Nome do usuário: " USER
-        read -p "Senha: " PASSWORD
+        read -p "Insira um nome do usuário: " USER
+        
+        echo "Adicionando '$USER' ..."
 
-        echo "Adicionando $USER ..."
-
-        add_a_user $USER $PASSWORD Novo user
+        add_a_user $USER Novo user
         ADDUSER_RETURN_CODE=$?
         if [ $ADDUSER_RETURN_CODE -eq 0 ]; then
             echo "Usuário $USER adicionado com sucesso!"
